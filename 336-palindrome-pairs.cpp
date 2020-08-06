@@ -8,17 +8,15 @@ using namespace std;
 class Solution {
 public:
     int is_palin(string s){
-        
-        int i = 0;
-        int len = s.length() / 2;
-        int res = 1;
+        int left = 0;
+        int right = s.length() - 1;
+        int res;
 
-        for(; i < len; i++){
-            // cout << i << ": " << s[i] << " " << "s.length() - i" << ": " << s[s.length() - 1 - i] << endl;
-            if(s[i] != s[s.length() - 1 - i]) {res = 0; return 0;}
+        while(right > left){
+            if(s[left++] != s[right--]) return false;
         }
 
-        return res;
+        return true;
     }
 
     vector< vector<int> > palindromePairs(vector<string>& words) {
@@ -72,3 +70,51 @@ int main(){
     
     return 0;
 }
+
+class Solution {
+public:
+     bool f(string& s,int left,int right){
+        while(left < right){
+            if(s[left++] != s[right--]) return false;//判断是否是回文对
+        }
+        return true;
+    }
+    vector<vector<int>> palindromePairs(vector<string>& words) {
+        //string test = "abcdef";
+        //cout << test.substr(3) << endl;
+        unordered_map<string,int> words_index_map;
+        set<int> word_size_set;
+        int n = words.size();
+        for(int i=0;i<n;i++){
+            words_index_map[words[i]]=i;//每个单词桶的value是索引
+            word_size_set.insert(words[i].size());//记录每个单词串长度
+        }
+        vector<vector<int>> res;
+        for(int i=0; i < words.size(); i++){
+            string word_reverse = words[i];
+            reverse(word_reverse.begin(), word_reverse.end());//反转每个单词
+            //如果reverse的字符在map中存在且不是自身，那么相加肯定是个回文对
+            if(words_index_map.count(word_reverse) && words_index_map[word_reverse] != i){
+                res.push_back({words_index_map[word_reverse], i});//返回两个单词对应索引
+            }
+            int length = word_reverse.size();
+
+            for(auto it = word_size_set.begin(); *it != length; it++){
+                int d = *it;
+                //遍历是否存在word前/后部分回文，以及剩余部分在map中是否存在，注意word已经是反转后的，map是没有反转的
+                //XXXXXabc,cba
+                //abcXXXXX,cba
+                if(f(word_reverse, 0, length - d - 1) && 
+                    words_index_map.count(word_reverse.substr(length - d))){//substr表示索引从length-d开始到结束间的字符
+                    res.push_back({i, words_index_map[word_reverse.substr(length - d)]});
+                }
+                if(f(word_reverse, d, length - 1) && 
+                    words_index_map.count(word_reverse.substr(0, d))){
+                    res.push_back({words_index_map[word_reverse.substr(0, d)], i});
+                }
+            }
+            
+        }
+        return res;
+    }
+};
