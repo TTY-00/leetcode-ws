@@ -5,6 +5,7 @@ LC index|problem|tag|difficulty|better solution|cpp|py|
 :-:|:-:|:-:|:-:|:-:|:-:|:-:
 1|Two Sum|array|easy|√|√|
 4|Median of Two Sorted Arrays|array|hard||√|
+24|Swap Nodes in Pairs|linked|medium||√|
 15|Three Sum|array|medium|||√
 100|Same Tree|tree|simple||√|
 198|House Robber I|array|easy|||
