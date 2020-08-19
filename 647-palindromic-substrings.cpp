@@ -22,7 +22,11 @@ public:
                         break;
                     }
                 }
-                res += is1;
+
+                if(is1 == 1){
+                    res += 1;
+                    cout << "s1: " << s.substr(l, (r - l)) << endl;
+                }
 
                 for(r = m + 1; r <= m + m - l + 1; r++){
                     if(r == len || s[r] != s[m - (r - m) + 1]){
@@ -30,8 +34,11 @@ public:
                         break;
                     }
                 }
-                
-                res += is2;
+
+                if(is2 == 1){
+                    res += 1;
+                    cout << "s2: " << s.substr(l, (r - l)) << endl;
+                }
             }
         }
 
